@@ -1,0 +1,25 @@
+ function onSubmit () {
+        // console.log(formData)
+        // db.collection('emails').add({
+        //     to: formData.to ,
+        //     subject: formData.subject ,
+        //     message: formData.message ,
+        //     timestamp: db.firestore.FieldValue.serverTimestamp() 
+        const db = firebase.database();
+        const ref = db.collection('emails').doc()
+
+        let addDoc = ref.get()
+            .then(doc => {
+                if (!doc.exists) {
+                    console.log('No such document!');
+                } else {
+                    console.log('Document data:', doc.data());
+                }
+            })
+                .catch(err => {
+                    console.log('Error getting document', err);
+            });
+        }
+
+        dispatch(CloseSendMessage())
+    }
