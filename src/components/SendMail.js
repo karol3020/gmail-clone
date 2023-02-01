@@ -12,14 +12,11 @@ function SendMail () {
     const { register, handleSubmit, errors  } = useForm();
 
     const onSubmit = (formData) => {
-        console.log(formData)
         db.collection('emails').add({
             to: formData.to ,
             subject: formData.subject ,
-            message: formData.message ,
-            timestamp: db.firestore.FieldValue.serverTimestamp() 
+            message: formData.message 
         })
-
         dispatch(CloseSendMessage())
     }
 

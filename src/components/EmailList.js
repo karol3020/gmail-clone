@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Checkbox, IconButton } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import RedoIcon from '@mui/icons-material/Redo'
@@ -13,8 +13,20 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer'
 import './EmailList.css'
 import Section from './Section'
 import EmailRow from './EmailRow'
+import { db } from './Firebase'
 
 function EmailList () {
+
+    const [emails, setEmails] = useState([])
+
+    useEffect(() => {
+        db.collection('emails').orderBy('desc').onSnapshot(snapshot => 
+            setEmails(snapshot.docs.map(doc => ({
+                id: doc.id,
+                data: doc.data(),
+            }))))
+    }, [])
+
     return (
         <div className='emailList'> 
             <div className='emailList__settings'>
@@ -57,6 +69,15 @@ function EmailList () {
                     color='green'/>
             </div>
             <div className='emailList__list'>
+                {emails.map(({id, data : {to, subject, message}}) => (
+                    <EmailRow 
+                    id={id}
+                    key={id}
+                    title={to}
+                    subject={subject}
+                    description={message}
+                    />
+                ))}
                 <EmailRow 
                 title='Twitch'
                 subject='Hey fellow streamer'

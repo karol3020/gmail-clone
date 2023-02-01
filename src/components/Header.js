@@ -7,8 +7,22 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AppsIcon from '@mui/icons-material/Apps';
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import { Avatar } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from '../features/userSlice';
+import { auth} from './Firebase'
+import { logout } from '../features/userSlice'
 
 function Header () {
+
+    const user = useSelector(selectUser)
+    const dispatch = useDispatch()
+
+    const signOut = () => {
+        auth.signOut().then(() => {
+            dispatch(logout())
+        })
+    }
+
     return (
         <div className='header'>
             <div className='header__left'>
@@ -34,7 +48,7 @@ function Header () {
                 <IconButton>
                     <NotificationsIcon />
                 </IconButton>
-                <Avatar />
+                <Avatar onClick={signOut} src={user?.photoUrl} />
             </div>
         </div>
     )
